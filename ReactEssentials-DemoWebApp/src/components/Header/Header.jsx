@@ -7,6 +7,12 @@ function genRandomInt(max) {
   return Math.floor(Math.random() * (max + 1));
 }
 
+{/* 
+    Components are essentially functions in React
+    - Name must start with an Uppercase character 
+    - return a value that can be rendered by React (ie. JSX)
+    - can use these components like custom HTML elements
+*/}
 export default function Header() {
     const description = reactDescriptions[genRandomInt(2)];
 
