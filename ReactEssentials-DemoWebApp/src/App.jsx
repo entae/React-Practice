@@ -95,3 +95,28 @@ function App() {
 }
 
 export default App;
+
+/*
+  To remove Unnecessary divs in the DOM:
+  Simply use <> </>:
+
+  return (
+    <>
+      <Header />
+      <main>
+      </main>
+    </>
+  )
+
+  // In Older React versions:
+  import { Fragment } from 'react';
+
+  return (
+    <Fragment>
+      <Header />
+      <main>
+      </main>
+    </Fragment>
+  )
+
+*/
