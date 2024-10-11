@@ -1,5 +1,4 @@
-export default function Log({ onSelectSquare, turns }) {
-
+export default function Log({ turns }) {
 
     return <ol id="log">
         {turns.map(turn => 

@@ -1,19 +1,4 @@
-const initialGameBoard = [
-  [null, null, null],
-  [null, null, null],
-  [null, null, null],
-];
-
-export default function GameBoard({ onSelectSquare, turns }) {
-  let gameBoard = initialGameBoard;
-
-  for (const turn of turns) {
-    //destructure turns twice to then use the values
-    const { square, player } = turn;
-    const { row, col } = square;
-    // take those values to then derive the state
-    gameBoard[row][col] = player;
-  }
+export default function GameBoard({ onSelectSquare, board }) {
 
   return (
     <ol id="game-board">
@@ -24,7 +9,7 @@ export default function GameBoard({ onSelectSquare, turns }) {
 
             As the use case doesn't involve swapping rows for our game, this should be fine.
             */}
-      {gameBoard.map((row, rowIndex) => (
+      {board.map((row, rowIndex) => (
         <li key={rowIndex}>
           <ol>
             {row.map((playerSymbol, colIndex) => (
