@@ -3,6 +3,7 @@ import { useState } from "react";
 import Player from "./components/Player";
 import GameBoard from "./components/GameBoard";
 import Log from "./components/Log";
+import { WINNING_COMBO } from "./components/winning-combo";
 
 // helper function to help set Active player for both
 // displaying active player and displaying correct symbol on gameBoard
