@@ -20,3 +20,23 @@ export default function TabButton({ children, onSelect, isSelected }) {
 // export default function TabButton( {children} ) {
 //     return <li><button>{children}</button></li>;
 // }
+
+{/* 
+You could  use a Rest Property to replace on Select {...props}:
+
+export default function TabButton({ children, isSelected, ...props }) {
+    return (
+        <li>
+            <button className={isSelected ? 'active' : undefined} {...props}> {children} 
+            </button>
+        </li>
+    );
+}
+
+Then where "TabButton" is being used, instead of having 'onSelect' in the TabButton tag:
+   ie: 
+    <TabButton isSelected={selectedTopic === 'state'} onSelect={() => handleSelect('state)}
+   INTO
+    <TabButton isSelected={selectedTopic === 'state'} onClick={() => handleSelect('state)}
+
+*/}
