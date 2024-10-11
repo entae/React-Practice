@@ -55,6 +55,7 @@ export default function Examples() {
         Just ensure that it is wrapped into one element within "<></>"
     */}
       <Tabs
+        buttonsContainer="menu"
         buttons={
           <>
             {/* props are used to configure components*/}

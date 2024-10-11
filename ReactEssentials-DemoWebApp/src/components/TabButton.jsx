@@ -8,6 +8,7 @@
     Here, the TabButton component has the 'onSelect' prop, which is used as a value for the onClick prop on the built-in button.
     We can use this onSelect prop to point at the function that should be executed when the button inside of the TabButton is clicked.
 */}
+
 export default function TabButton({ children, onSelect, isSelected }) {
     return (
         <li>
