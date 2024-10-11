@@ -3,6 +3,7 @@ import { useState } from "react";
 import Player from "./components/Player";
 import GameBoard from "./components/GameBoard";
 import Log from "./components/Log";
+import GameOver from "./components/GameOver";
 import { WINNING_COMBO } from "./components/winning-combo";
 
 const initialGameBoard = [
@@ -28,7 +29,8 @@ function App() {
 
   const activePlayer = deriveActivePlayer(gameTurns);
 
-  let gameBoard = initialGameBoard;
+  // Create DEEP copy of game board
+  let gameBoard = [...initialGameBoard.map(array => [...array])];
 
   for (const turn of gameTurns) {
     //destructure turns twice to then use the values
@@ -54,9 +56,11 @@ function App() {
       firstSquareSymbol === thirdSquareSymbol
     ) {
       winner = firstSquareSymbol;
-      console.log(winner);
     }
   }
+
+  // Check if the game resulted in a draw
+  const hasDraw = gameTurns.length === 9 && !winner;
 
   function handleSelectSquare(rowIndex, colIndex) {
     setGameTurns((prevTurns) => {
@@ -69,6 +73,10 @@ function App() {
 
       return updatedTurns;
     });
+  }
+
+  function handleRestart() {
+    setGameTurns([]);
   }
 
   return (
@@ -87,7 +95,7 @@ function App() {
           />
         </ol>
         {/* If winner is truthy, display win message */}
-        {winner && <p>You won, {winner}!</p>}
+        {(winner || hasDraw) && (<GameOver winner={winner} onRestart={handleRestart}/> )}
         <GameBoard onSelectSquare={handleSelectSquare} board={gameBoard} />
       </div>
       <Log turns={gameTurns} />
