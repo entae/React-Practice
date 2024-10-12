@@ -47,6 +47,14 @@ h1 {
   color: #3f3b00;
 }
 
+footer {
+  font: inherit;
+  font-size: 1rem;
+  text-align: right;
+  color: #23221f;
+  text-rendering: optimizeLegibility;
+}
+
 #game-container {
   max-width: 45rem;
   margin: 3rem auto;
