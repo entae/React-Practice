@@ -1,6 +1,11 @@
 import { useState } from "react";
 
-export default function Player({ initialName, symbol, isActive }) {
+export default function Player({ 
+    initialName, 
+    symbol, 
+    isActive, 
+    onChangeName 
+}) {
   const [playerName, setPlayerName] = useState(initialName);
   const [editState, saveEditState] = useState(false);
 
@@ -10,6 +15,10 @@ export default function Player({ initialName, symbol, isActive }) {
     // ie: saveEditState(!editState) would be bad practice
     // instead you should call a function instead
     saveEditState((editing) => !editing);
+    
+    if (editState) {
+        onChangeName( symbol, playerName )
+    }
   }
 
   function handleChange(event) {
