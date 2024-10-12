@@ -4,7 +4,8 @@
 // or if you wanted to use custom components instead:
 //  <tabs buttonsContainer={Section} buttons{} />
 
-export default function Tabs({ children, buttons, buttonsContainer }) {
+//you can also use default values with props
+export default function Tabs({ children, buttons, buttonsContainer='menu' }) {
   // you have to pass the value from the prop into the variable that starts with a Capital case character
   // This allows for the variable to be used as a custom component if needed
   // you could've also just created a prop that starts with an Uppercase character to avoid creating another variable
