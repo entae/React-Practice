@@ -1,4 +1,4 @@
-import logo from '../assets/money.png'
+import logo from '../assets/investment-calculator-logo.svg'
 
 export default function Header() {
     return <header id="header">
