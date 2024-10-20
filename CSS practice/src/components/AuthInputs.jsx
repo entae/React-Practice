@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { styled } from 'styled-components';
 
+import Button from './Button';
+import Input from './Input'
+
 // Tagged template
 // Takes html classes and forwards the styles defined 
 const ControlContainer = styled.div`
@@ -8,28 +11,7 @@ const ControlContainer = styled.div`
   flex-direction: column;
   gap: 0.5rem;
   margin-bottom: 1.5rem;
-`
-
-const Label = styled.label`
-  display: block;
-  margin-bottom: 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #6b7280;
-`
-
-const Input = styled.input`
-  width: 100%;
-  padding: 0.75rem 1rem;
-  line-height: 1.5;
-  background-color: #d1d5db;
-  color: #374151;
-  border: 1px solid transparent;
-  border-radius: 0.25rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-`
+`;
 
 export default function AuthInputs() {
   const [enteredEmail, setEnteredEmail] = useState('');
@@ -54,43 +36,44 @@ export default function AuthInputs() {
   return (
     <div id="auth-inputs">
       <ControlContainer>
-        <p>
-          <Label>Email</Label>
-          {/* 
-          If you wanted to inject a class that was always there but make the attributes dynamic, you could;
-          <label className={`label ${emailNotValid ? 'invalid' : ''}`}>
-            Email
-          </label>
-          */}
           <Input
-            type="email"
+            label="Email"
+            invalid={emailNotValid}
             // inline styling for invalid input 
             // style={{
             //   backgroundColor: emailNotValid ? '#fed2d2' : '#d1d5db',
             //   borderColor: emailNotValid && '#f73f3f'
             // }}
-            // When adding a className within a one-line, you should make it ternary wince you are making the class boolean
-            className={emailNotValid ? 'invalid' : undefined}
+            // When adding a className within a one-line, you should make it ternary since you are making the class boolean
+            // className={emailNotValid ? 'invalid' : undefined}
+            type="email"
             onChange={(event) => handleInputChange('email', event.target.value)}
           />
-        </p>
-        <p>
-          <Label>Password</Label>
+
           <Input
+            invalid={passwordNotValid}
+            label="Password"
             type="password"
-            className={passwordNotValid ? 'invalid' : undefined}
             onChange={(event) =>
               handleInputChange('password', event.target.value)
             }
           />
-        </p>
+
       </ControlContainer>
       <div className="actions">
         <button type="button" className="text-button">
           Create a new account
         </button>
-        <button className='button' onClick={handleLogin}>Sign In</button>
+        <Button onClick={handleLogin}>Sign In</Button>
       </div>
     </div>
   );
 }
+
+
+{/* 
+If you wanted to inject a class that was always there but make the attributes dynamic, you could;
+<label className={`label ${emailNotValid ? 'invalid' : ''}`}>
+  Email
+</label>
+*/}
