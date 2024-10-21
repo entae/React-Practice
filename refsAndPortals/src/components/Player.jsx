@@ -6,7 +6,12 @@ export default function Player() {
   const [enteredPlayerName, setEnteredPlayerName] = useState(null);
 
   function handleChange() {
+    // Remember, React should handle all DOM interactions
+    // here we're reading a value to set it (declarative)
     setEnteredPlayerName(playerName.current.value);
+    // where as the line below is definitely imperative
+    //where we directly set the value of a field
+      // playerName.current.value = '';
   }
 
   return (
