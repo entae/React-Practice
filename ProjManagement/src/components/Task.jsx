@@ -1,8 +1,8 @@
 export default function Task({ name, ...props }) {
     return(
         <>
-            <h2></h2>
-            <p></p>
+            <h2>{name}</h2>
+            <button>Clear</button>
         </>
     )
 }
