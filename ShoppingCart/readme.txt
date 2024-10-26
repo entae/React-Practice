@@ -1,0 +1,1 @@
+Practicing Context API & Advanced State Management to avoid prop drilling.
