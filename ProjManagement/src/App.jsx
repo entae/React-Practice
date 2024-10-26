@@ -6,11 +6,11 @@ import { useState } from "react";
 function App() {
   const [projectsState, setProjectsState] = useState({
     selectedProjectId: undefined,
-    projects: []
-  })
+    projects: [],
+  });
 
   function handleStartAddProject() {
-    setProjectsState(prevState => {
+    setProjectsState((prevState) => {
       return {
         ...prevState,
         selectedProjectId: null,
@@ -19,30 +19,35 @@ function App() {
   }
 
   function handleAddProject(projectData) {
-    setProjectsState(prevState => {
+    setProjectsState((prevState) => {
+      const projId = Math.random();
       const newProject = {
         ...projectData,
-        id: Math.random()
-      }
+        id: projId,
+      };
 
       return {
         ...prevState,
-        projects: [...prevState.projects, newProject]
-      }
-    })
+        selectedProjectId: undefined,
+        projects: [...prevState.projects, newProject],
+      };
+    });
   }
 
   let content;
 
   if (projectsState.selectedProjectId === null) {
-    content = <NewProject onAdd={handleAddProject}/>
+    content = <NewProject onAdd={handleAddProject} />;
   } else if (projectsState.selectedProjectId === undefined) {
-    content = <NoProjSelected onStartAddProject={handleStartAddProject} />
+    content = <NoProjSelected onStartAddProject={handleStartAddProject} />;
   }
 
   return (
     <main className="h-screen my-8 flex gap-8">
-      <Sidebar onStartAddProject={handleStartAddProject}/>
+      <Sidebar
+        onStartAddProject={handleStartAddProject}
+        projects={projectsState.projects}
+      />
       {content}
     </main>
   );
