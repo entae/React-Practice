@@ -3,9 +3,11 @@ import { useContext } from "react";
 import { CartContext } from "../store/shopping-card-context";
 
 export default function Cart() {
-  const { items, updateItemQuantity} = useContext(CartContext); // Creates connection between state and context
+  // Creates connection between state and context
   // destructured item to use property
+  const { items, updateItemQuantity} = useContext(CartContext); 
 
+  // reducer = A function that reduces one or more complex values to a simpler one
   const totalPrice = items.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0

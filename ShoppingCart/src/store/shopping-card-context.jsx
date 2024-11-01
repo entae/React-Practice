@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useReducer } from "react";
 
 import { DUMMY_PRODUCTS } from "../dummy-products";
 
@@ -11,76 +11,105 @@ export const CartContext = createContext({
   updateItemQuantity: () => {},
 });
 
-// This function is all about managing context data about the shopping cart and providing that data to our application
-export default function CartContextProvider({children}) {
-  const [shoppingCart, setShoppingCart] = useState({
-    items: [],
-  });
+// Created outside the component function because
+// it shouldn't be recreated whenever the component function executes
+// because it also won't need direct access to any value defined or updated in the component function
 
-  function handleAddItemToCart(id) {
-    setShoppingCart((prevShoppingCart) => {
-      const updatedItems = [...prevShoppingCart.items];
+// state in reducer is always the latest state
+function shoppingCartReducer(state, action) {
+  if (action.type === "ADD_ITEM") {
+    const updatedItems = [...state.items];
 
-      const existingCartItemIndex = updatedItems.findIndex(
-        (cartItem) => cartItem.id === id
-      );
-      const existingCartItem = updatedItems[existingCartItemIndex];
+    const existingCartItemIndex = updatedItems.findIndex(
+      (cartItem) => cartItem.id === action.payload
+    );
+    const existingCartItem = updatedItems[existingCartItemIndex];
 
-      if (existingCartItem) {
-        const updatedItem = {
-          ...existingCartItem,
-          quantity: existingCartItem.quantity + 1,
-        };
-        updatedItems[existingCartItemIndex] = updatedItem;
-      } else {
-        const product = DUMMY_PRODUCTS.find((product) => product.id === id);
-        updatedItems.push({
-          id: id,
-          name: product.title,
-          price: product.price,
-          quantity: 1,
-        });
-      }
-
-      return {
-        items: updatedItems,
+    if (existingCartItem) {
+      const updatedItem = {
+        ...existingCartItem,
+        quantity: existingCartItem.quantity + 1,
       };
-    });
+      updatedItems[existingCartItemIndex] = updatedItem;
+    } else {
+      const product = DUMMY_PRODUCTS.find(
+        (product) => product.id === action.payload
+      );
+      updatedItems.push({
+        id: action.payload,
+        name: product.title,
+        price: product.price,
+        quantity: 1,
+      });
+    }
+
+    return {
+      ...state, // not needed here because we only have on value, but good to use if there were more values
+      items: updatedItems,
+    };
   }
 
+  if (action.type === "UPDATE_ITEM") {
+    const updatedItems = [...state.items];
+    const updatedItemIndex = updatedItems.findIndex(
+      (item) => item.id === action.payload.productId
+    );
+
+    const updatedItem = {
+      ...updatedItems[updatedItemIndex],
+    };
+
+    updatedItem.quantity += action.payload.amount;
+
+    if (updatedItem.quantity <= 0) {
+      updatedItems.splice(updatedItemIndex, 1);
+    } else {
+      updatedItems[updatedItemIndex] = updatedItem;
+    }
+
+    return {
+      ...state,
+      items: updatedItems,
+    };
+  }
+
+  return state;
+}
+
+// This function is all about managing context data about the shopping cart and providing that data to our application
+export default function CartContextProvider({ children }) {
+  const [shoppingCartState, shoppingCartDispatch] = useReducer(
+    shoppingCartReducer,
+    {
+      items: [],
+    }
+  );
+
+  function handleAddItemToCart(id) {
+    shoppingCartDispatch({
+      type: "ADD_ITEM",
+      payload: id,
+    });
+  }
+  
   function handleUpdateCartItemQuantity(productId, amount) {
-    setShoppingCart((prevShoppingCart) => {
-      const updatedItems = [...prevShoppingCart.items];
-      const updatedItemIndex = updatedItems.findIndex(
-        (item) => item.id === productId
-      );
-
-      const updatedItem = {
-        ...updatedItems[updatedItemIndex],
-      };
-
-      updatedItem.quantity += amount;
-
-      if (updatedItem.quantity <= 0) {
-        updatedItems.splice(updatedItemIndex, 1);
-      } else {
-        updatedItems[updatedItemIndex] = updatedItem;
-      }
-
-      return {
-        items: updatedItems,
-      };
+    shoppingCartDispatch({
+      type: "UPDATE_ITEM",
+      payload: {
+        productId,
+        amount,
+      },
     });
   }
 
   const ctxValue = {
-    items: shoppingCart.items,
+    items: shoppingCartState.items,
     // any item that has this component can now call this function below
     addItemToCart: handleAddItemToCart,
     updateItemQuantity: handleUpdateCartItemQuantity,
   };
 
-  return <CartContext.Provider value={ctxValue}>
-    {children}
-  </CartContext.Provider>
+  return (
+    <CartContext.Provider value={ctxValue}>{children}</CartContext.Provider>
+  );
 }
