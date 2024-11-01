@@ -1,15 +1,44 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from "react";
 
-import Places from './components/Places.jsx';
-import { AVAILABLE_PLACES } from './data.js';
-import Modal from './components/Modal.jsx';
-import DeleteConfirmation from './components/DeleteConfirmation.jsx';
-import logoImg from './assets/logo.png';
+import Places from "./components/Places.jsx";
+import { AVAILABLE_PLACES } from "./data.js";
+import Modal from "./components/Modal.jsx";
+import DeleteConfirmation from "./components/DeleteConfirmation.jsx";
+import logoImg from "./assets/logo.png";
+import { sortPlacesByDistance } from "./loc.js";
 
 function App() {
   const modal = useRef();
   const selectedPlace = useRef();
+  const [availablePlaces, setAvailablePlaces] = useState([]);
   const [pickedPlaces, setPickedPlaces] = useState([]);
+
+  // Using useEffect avoid infinite loop
+  // first argument to useEffect is executed AFTER every component execution
+  // Only if the dependencies array's values change does the 1st argument get executed again
+  // Therefore the dependencies array is necessary to avoid infinite looping, even if it's an empty array
+
+  // does not return value, but takes 2 arguments
+  // first argument wraps the side effect code
+  // second argument is an array of dependencies
+  useEffect(() => {
+    // navigator is provided by the browser
+    // It is exposed by the browser to our JS code
+    // getCurrentPosition() asks user for permission, and if granted allows us the user's location info
+    // but since that can take some time, we call it as a callback
+    navigator.geolocation.getCurrentPosition((position) => {
+      // THIS is a side effect
+      const sortedPlaces = sortPlacesByDistance(
+        AVAILABLE_PLACES,
+        position.coords.latitude,
+        position.coords.longitude
+      );
+      // this triggers new render cycle
+      // but then it re-triggers the app, causing the fetch of location to happen again
+      // causes infinite loop which will crash
+      setAvailablePlaces(sortedPlaces);
+    });
+  }, [] );
 
   function handleStartRemovePlace(id) {
     modal.current.open();
@@ -57,13 +86,14 @@ function App() {
       <main>
         <Places
           title="I'd like to visit ..."
-          fallbackText={'Select the places you would like to visit below.'}
+          fallbackText={"Select the places you would like to visit below."}
           places={pickedPlaces}
           onSelectPlace={handleStartRemovePlace}
         />
         <Places
           title="Available Places"
-          places={AVAILABLE_PLACES}
+          places={availablePlaces}
+          fallbackText="Sorting places by distance..."
           onSelectPlace={handleSelectPlace}
         />
       </main>
