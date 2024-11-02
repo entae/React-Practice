@@ -39,6 +39,8 @@ function App() {
       setAvailablePlaces(sortedPlaces);
     });
   }, [] );
+  // remember that not all side effects may need useEffect
+  // and overuse can be bad practice as it requires an execution cycle
 
   function handleStartRemovePlace(id) {
     modal.current.open();
@@ -57,6 +59,18 @@ function App() {
       const place = AVAILABLE_PLACES.find((place) => place.id === id);
       return [place, ...prevPickedPlaces];
     });
+
+    // example of side effect without use of useEffect
+    // because it does not update any states, 
+    // also does not run with app execution, so no infinite loop
+    // localStorage is provided by browser
+    const storeIds = JSON.parse(localStorage.getItem('selectedPlaces')) || [];
+    if (storedIds.indexof(id) === -1) {
+      localStorage.setItem(
+        'selectedPlaces',
+        JSON.stringify([id, ...storedIds])
+      )
+    }
   }
 
   function handleRemovePlace() {
