@@ -1,10 +1,10 @@
 import { useState, useCallback } from "react";
 
 import QUESTIONS from "../questions";
-import QuestionTimer from "./QuestionTimer";
+import Question from "./Question";
 import quizCompleteImg from "../assets/quiz-complete.png";
 
-const timeoutValue = 5000;
+const timeoutValue = 10000;
 
 export default function Quiz() {
   const [userAnswers, setUserAnswers] = useState([]);
@@ -36,31 +36,15 @@ export default function Quiz() {
     );
   }
 
-  // only executes if there are no more questions to display
-  const shuffledAnswers = [...QUESTIONS[activeQuestionIndex].answers];
-  shuffledAnswers.sort(() => Math.random() - 0.5);
-
   return (
     <div id="quiz">
-      <div id="question">
-        <QuestionTimer
-          // When the key changes react will unmount then mount this component, effectively resetting the timer for us
-          key={activeQuestionIndex}
-          timeout={timeoutValue}
-          // creates null entry in answer array
-          onTimeout={handleSkipAnswer}
-        />
-        <h2>{QUESTIONS[activeQuestionIndex].text}</h2>
-        <ul id="answers">
-          {shuffledAnswers.map((answer) => (
-            <li key={answer} className="answer">
-              <button onClick={() => handleSelectAnswer(answer)}>
-                {answer}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <Question
+        key={activeQuestionIndex}
+        index={activeQuestionIndex}
+        timeoutValue={timeoutValue}
+        onSelectAnswer={handleSelectAnswer}
+        onSkipAnswer={handleSkipAnswer}
+      />
     </div>
   );
 }
