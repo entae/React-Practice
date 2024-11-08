@@ -15,17 +15,27 @@ export default function Question({
     isCorrect: null,
   });
 
+  let timer = timeoutValue;
+
   function handleSelectAnswer(answer) {
     setAnswer({
       selectedAnswer: answer,
       isCorrect: null,
-    })
+    });
 
     setTimeout(() => {
       setAnswer({
         selectedAnswer: answer,
-        isCorrect: QUESTIONS[index].answers[0] === answer
+        isCorrect: QUESTIONS[index].answers[0] === answer,
       });
+
+      if (answer.selectedAnswer) {
+        timer = 1000;
+      }
+
+      if (answer.isCorrect !== null) {
+        timer = 2000;
+      }
 
       setTimeout(() => {
         onSelectAnswer(answer);
@@ -44,10 +54,12 @@ export default function Question({
   return (
     <div id="question">
       <QuestionTimer
+        key={timer}
         // When the key changes react will unmount then mount this component, effectively resetting the timer for us
-        timeout={timeoutValue}
+        timeout={timer}
         // creates null entry in answer array
-        onTimeout={onSkipAnswer}
+        onTimeout={answer.selectedAnswer === '' ? onSkipAnswer : null}
+        mode={answerState}
       />
       <h2>{QUESTIONS[index].text}</h2>
       <Answers
