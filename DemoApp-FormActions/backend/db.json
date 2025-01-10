@@ -2,7 +2,7 @@
   "opinions": [
     {
       "id": 1736528838739,
-      "votes": 0,
+      "votes": 1,
       "userName": "itc",
       "title": "Testing Submit Button",
       "body": "Button should turn int \"Submitting...\""
