@@ -9,7 +9,7 @@ function newOpinionAction(prevFormState, formData) {
 
   let errors = [];
 
-  if (!isNotEmpty(userName)) {
+  if (!isNotEmpty(userName.trim())) {
     errors.push("Please provide a user name.");
   }
 
