@@ -1,40 +1,48 @@
-import { useActionState } from "react";
+import { useActionState, use } from "react";
 
 import { isNotEmpty, hasMinLength } from "../util/validation";
+import { OpinionsContext } from "../store/opinions-context";
 
-function newOpinionAction(prevFormState, formData) {
-  const userName = formData.get("userName");
-  const title = formData.get("title");
-  const body = formData.get("body");
-
-  let errors = [];
-
-  if (!isNotEmpty(userName.trim())) {
-    errors.push("Please provide a user name.");
-  }
-
-  if (title.trim().length < 5) {
-    errors.push("Title must be at least 5 characters long.");
-  }
-
-  if (body.trim().length < 10) {
-    errors.push("Body must be at least 10 characters long.");
-  }
-
-  if (errors.length > 0) {
-    return {
-      errors,
-      enteredValues: {
-        userName,
-        title,
-        body,
-      },
-    };
-  }
-  return { errors: null };
-}
 
 export function NewOpinion() {
+  const { addOpinion } = use(OpinionsContext);
+  
+  async function newOpinionAction(prevState, formData) {
+    const userName = formData.get("userName");
+    const title = formData.get("title");
+    const body = formData.get("body");
+  
+    let errors = [];
+  
+    if (!isNotEmpty(userName.trim())) {
+      errors.push("Please provide a user name.");
+    }
+  
+    if (title.trim().length < 5) {
+      errors.push("Title must be at least 5 characters long.");
+    }
+  
+    if (body.trim().length < 10) {
+      errors.push("Body must be at least 10 characters long.");
+    }
+  
+    if (errors.length > 0) {
+      return {
+        errors,
+        enteredValues: {
+          userName,
+          title,
+          body,
+        },
+      };
+    }
+  
+    // submit to backend
+    await addOpinion({ title, body, userName });
+  
+    return { errors: null };
+  }
+
   const [formState, formAction, pending] = useActionState(newOpinionAction, {
     errors: null,
   });
