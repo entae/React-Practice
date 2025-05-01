@@ -31,15 +31,15 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "/",
+        path: "",
         element: <HomePage />,
       },
       {
-        path: "/products",
+        path: "products",
         element: <ProductsPage />,
       },
       {
-        path: "/products/:productID", // the colon ":" lets you use dynamic values 
+        path: "products/:productId", // the colon ":" lets you use dynamic values 
         element: <ProductDetailPage />,
       },
     ],
