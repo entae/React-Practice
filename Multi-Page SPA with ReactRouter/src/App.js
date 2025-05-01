@@ -7,6 +7,7 @@ import {
 
 import HomePage from "./pages/HomePage";
 import ProductsPage from "./pages/ProductsPage";
+import ProductDetailPage from "./pages/ProductDetails";
 import RootLayout from "./pages/RootLayout";
 import ErrorPage from "./pages/ErrorPage";
 
@@ -37,12 +38,16 @@ const router = createBrowserRouter([
         path: "/products",
         element: <ProductsPage />,
       },
+      {
+        path: "/products/:productID", // the colon ":" lets you use dynamic values 
+        element: <ProductDetailPage />,
+      },
     ],
   },
-  {
-    path: "/admin",
-    children: [],
-  },
+  // {
+  //   path: "/admin",
+  //   children: [],
+  // },
 ]);
 
 function App() {
